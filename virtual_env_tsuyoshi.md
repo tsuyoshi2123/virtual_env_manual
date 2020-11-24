@@ -46,7 +46,6 @@ vagrant init centos/7  //先ほどダウンロードし指定したvagrant box�
  **実行後問題なければ以下のような文言が表示されます**
 
 ```
-
 A `Vagrantfile` has been placed in this directory. You are now
 ready to `vagrant up` your first virtual environment! Please read
 the comments in the Vagrantfile as well as documentation on
@@ -251,7 +250,7 @@ yumではなく外部パッケージツールをダウンロードして、そ�
 下記のコマンド参照  
 `php php-devel php-mbstring php-pdo php-gd php-xml php-mcrypt`の部分は  
 PHPのインストールと同時に、PHPアプリケーションを動かす上で必要となるモジュール(拡張機能)をインストールしています  
-例えば `php-pdo` はPDO接続行う為に、`php-mbstring`はPHPで日本語名護のマルチバイト文字を扱う為に必要になります  
+例えば `php-pdo` はPDO接続行う為に、`php-mbstring`はPHPで日本語名護のマルチバイト文字を扱う為に必要になります  
 アプリケーションの開発に必要な外部モジュール箱のように追加していきます。
 
 [phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
@@ -396,7 +395,7 @@ mysql > create database laravel_app;
 
 Query OKと表示されたら作成は完了となります。
 ## データベース内のLaravelを動かす
-laravel_appディレクトリ下の `.env` ファイルの内容を以下に変更してください。
+laravel_appディレクトリ下の `.env` ファイルの内容を以下に変更してください。
 
 ```
 DB_PASSWORD=
@@ -404,7 +403,7 @@ DB_PASSWORD=
 DB_PASSWORD=登録したパスワード
 ```
 
-では、laravel_appディレクトリに移動して `php artisan migrate` を実行します。  
+では、laravel_appディレクトリに移動して `php artisan migrate` を実行します。  
 マイグレーションが問題なく実行できた後、ブラウザ上でユーザー登録ができればローカルで動かしていたLaravelを
 仮想環境上で全く同じように動かすことができたということになります。
 
@@ -448,7 +447,7 @@ $ sudo systemctl start nginx
 
 ## Nginx と php-fpm 設定値変更
 では、早速Nginxの設定ファイルを編集していきます。
-使用しているOSがCentOSの場合、`/etc/nginx/conf.d` ディレクトリ下の default.conf ファイルが設定ファイルとなります。
+使用しているOSがCentOSの場合、`/etc/nginx/conf.d` ディレクトリ下の default.conf ファイルが設定ファイルとなります。
 
 ```
 $ sudo vi /etc/nginx/conf.d/default.conf
@@ -520,7 +519,7 @@ $ sudo systemctl restart nginx   //Nginx 再起動
 $ sudo systemctl start php-fpm   //php-fpm 再起動
 ```
 
-再度ブラウザにて、 `http://192.168.33.10` を入力して確認してください。  
+再度ブラウザにて、 `http://192.168.33.10` を入力して確認してください。  
 Apache同様にTodoアプリケーションを動かすことはできたでしょうか？？
 
 <br>
@@ -533,7 +532,7 @@ Apache同様にTodoアプリケーションを動かすことはできたでし�
 The stream or file "/vagrant/laravel_app/storage/logs/laravel.log" could not be opened:failed to open stream: Permission denied
 ```
 
-これは 先程php-fpmの設定ファイルの user と group を `nginx` に変更したと思いますが、ファイルとディレクトリの実行 user と group に `nginx` が許可されていないため起きているエラーです。
+これは 先程php-fpmの設定ファイルの user と group を `nginx` に変更したと思いますが、ファイルとディレクトリの実行 user と group に `nginx` が許可されていないため起きているエラーです。
 
 **試しに以下のコマンドを実行してみてください。**
 
@@ -542,9 +541,9 @@ $ ls -la ./ | grep storage && ls -la storage/ | grep logs && ls -la storage/logs
 ```
 
 出力結果から、storageディレクトリも logsディレクトリも laravel.logファイルも全て `user` と `group` が
-`vagrant` となっていますので、これでは `nginx` というユーザーの権限をもってlaravel.logファイルへの書き込みができません。
+`vagrant` となっていますので、これでは `nginx` というユーザーの権限をもってlaravel.logファイルへの書き込みができません。
 
-では、以下のコマンドを実行して `nginx` というユーザーでもログファイルへの書き込みができる権限を付与してあげましょう。
+では、以下のコマンドを実行して `nginx` というユーザーでもログファイルへの書き込みができる権限を付与してあげましょう。
 
 ```
 $ cd /vagrant/laravel_app
@@ -581,7 +580,7 @@ Route::get('/', function () {
 $ tail -f storage/logs/laravel.log
 ```
 
-では、再度 `http://192.168.33.10` のURLにアクセスしてみます。
+では、再度 `http://192.168.33.10` のURLにアクセスしてみます。
 
 ```
 syntax error, unexpected '}', expecting ';'
@@ -589,7 +588,7 @@ syntax error, unexpected '}', expecting ';'
 
 といった内容のエラーが画面上に表示され、同じ内容のエラー文言がlaravel.logに書き込みされたことも確認できたでしょうか？？
 
-確認が完了しましたら、`Ctrl + c` でtailの実行モードを終了しましょう。
+確認が完了しましたら、`Ctrl + c` でtailの実行モードを終了しましょう。
 
 では変更した `routes/web.php` の内容を元に戻して再度 http://192.168.33.10 にアクセスして正常にLaravelのWelcome画面の表示をしてください。
 
