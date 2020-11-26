@@ -1,58 +1,151 @@
 # vagrant 仮想環境構築
-## vagrantBox vagrant インストール
-### vagrantBoxインストール
-下記のサイトからそれぞれのdmgファイルをダウンロード後、インストールを進めてください。
+  [仮想環境とは](https://bcblog.sios.jp/what-is-virtualenvironment-vmware/#i)
+  [virtualbox1](https://www.sejuku.net/blog/72833)
+  [virtualbox2](https://eng-entrance.com/vm-list#VirtualBox)
+  
+- 仮想環境とは
+  仮想的サーバ、ストレージを作ることによって物理的環境に左右されることなく使用することができる.  
+  仮想環境を構築することによってlinux用のパソコン、windowsのパソコンなどそれぞれ用意する必要がなくなるので  
+  好きな環境を構築し一つのハードウェアで一元管理することができる。  
+  仮に仮想環境が故障した時にバックアップをとることによってバックアップファイルを別のハードウェアを移行することによって容易に運用することができる。
+<br>
 
+- vagrantとは
+  仮想マシン(virtualbox,docker)の簡単な構築をし同じような環境を再現することができる  
+  そのほかにコマンド一つで仮想マシンを起動削除したりなど容易に管理する。  
+  これから利用する**virtualbox**ではホストOSとゲストOS間を同時並行して仮想的なOSを一つを追加して  
+  OS間の移動をすることができる。  
+  共有フォルダを設けることによってホストOSとゲストOS間のファイルやディレクトリを共有することできる  
+  などの操作をすることができる。詳しくは上記にリンクが貼っているので参照しましょう。  
+<br>実際にvagrantを利用して仮想環境構築していきましょう。  
+
+
+## virtualbox  vagrant インストール
+### virtualbox ダウンロード
+
+下記のサイトからそれぞれのdmgファイルをダウンロード後、インストールを進めてください。  
 [Virtual Box公式](https://www.virtualbox.org/wiki/Download_Old_Builds_6_0)
 
-※ **Vagrantの最新バージョンがVirtualBoxの最新バージョンに対応していないため、Virtual Boxはver6.0.14をインストールするようにしてください。**
+※ **Vagrantの最新バージョンがVirtualBoxの最新バージョンに対応していないため、  
+Virtual Boxはver6.0.14をインストールするようにしてください。**
+<br>
 
-### Macの場合
-`OS X hosts` を選択しましょう。
+#### virtualbox インストール (Macの場合)
+**`OS X hosts`** を選択しましょう。
 
-以下のコマンドを実行してVirtualBoxのウィンドウが表示されれば正常にインストールされています。
+以下のコマンドを実行してVirtualBoxのウィンドウが表示されれば正常にインストールされています。  
 
 ```
 $ virtualbox
 ```
 
-コマンド実行後は入力を受け付けない状態となるため、 Control + c を押してください。
+コマンド実行後は入力を受け付けない状態となるため、 `Control + c` を押してください。
 
-Vagrant インストール
+####Vagrant インストール (Macの場合)
+下記コマンドで簡単にインストールすることが可能です。
+
+```
+$ brew cask install vagrant
+```
+
+**バージョン確認する方法**
+
+```
+$ vagrant -v
+```
+
+バージョンが確認できたらインストール完了です
 
 <br>
+
+##vagrant box ダウンロード
+仮想環境(ゲストOS)をで開発するにあったって、ゲストOSに必要なOSを追加しなくてはなりません  
+今回使用するのはlinuxのCentOSのバージョン7のBox名 **`centos/7`** を指定して実際にダウンロードしてみましょう!
+
+**コマンドを実行するディレクトリはどこでも構いません**
+
+```
+vagrant box add centos/7
+```
+
+コマンドを実行すると、下記のような選択肢が表示されます
+
+```
+1) hyperv
+2) libvirt
+3) virtualbox
+4) vmware_desktop
+
+Enter your choice: 3
+```
+
+今回使用するソフトはVirtualBoxのため、3を選択してenterを押しましょう。
+**下記のように表示されたら完了です。**
+
+```
+Successfully added box 'centos/7' (v1902.01) for 'virtualbox'!
+```
+
+**念のためboxが追加されたか確認する**
+
+```
+vagrant box list
+centos/7 (virtualbox, 1902.01)
+```
+
 
 ## Vagrant 作業用ディレクトリ作成
 
-**[いずれかのディレクトリ下に任意の名前で作成]**
+
+**いずれかのディレクトリ下に任意の名前で作成**
 - 自分の作業用ディレクトリ
 - デスクトップ
-```
-mkdir フォルダ名
-```
-
-**[作成したディレクトリに移動]**
-```
-cd ディレクトリ名
-```
-<br>
-
-## Vagrantfile 編集
-**【移動したファイルに対しvagrant設定ファイルの投入】**
-
-vagrant init box  
-vagrant init centos/7  //先ほどダウンロードし指定したvagrant boxを投入する
-
- **実行後問題なければ以下のような文言が表示されます**
 
 ```
+# mkdir ディレクトリ名 ここではディレクトリ名をvagrant_testとしましょう
+mkdir vagrant_test
+```
+
+**作成したディレクトリに移動**
+
+```
+cd vagrant_test
+```
+
+作成したらフォルダの中で以下のコマンドを実行してください
+
+```
+# 作成したディレクトリに移動
+cd vagrant_test
+# vagrant init box名 先ほどダウンロードしたboxを使用することになります
+vagrant init centos/7
+
+実行後問題なければ以下のような文言が表示されます
 A `Vagrantfile` has been placed in this directory. You are now
 ready to `vagrant up` your first virtual environment! Please read
 the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
+
 ```
 
-**【vagrant 編集】  Vagrantfile ファイル**
+`vagrant init centos/7`を実行したことにより作成したディレクトリ内に
+`vagrantfile` という設定ファイルが作成されています
+実際に編集してみましょう
+
+<br>
+
+## Vagrantfile 編集
+[vagrantfile1](https://qiita.com/pugiemonn/items/bcd95a35c3ec7624cd61)
+
+**vagrantfaile編集前に...**
+
+`vi vagrantfile` `vi 指定ファイルまでの相対パス` と実行するとvimコマンドが実行されターミナル上で指定したファイルの
+編集を行うことができます.
+編集してみましょう!
+
+**vagrant 編集  Vagrantfile ファイル**
+
+下記の編集箇所のコメントを外し変更を加えてください
 
 ```
 変更点1   IPアドレスプライベートネットワーク設定
@@ -65,28 +158,29 @@ the comments in the Vagrantfile as well as documentation on
                             ↓
   # config.vm.synced_folder "./", "/vagrant", type:"virtualbox"   
 ```
-     
-- 変更点1  
-  ・ネットワークに必要なIPアドレスの設定している  
-  ・[その他vagrantネット設定説明](https://qiita.com/centipede/items/64e8f7360d2086f4764f)
 
-- 変更点2  
-・カレントディレクトリと指定のディレクトリを指している。  
-・紐付けることでリアルタイムで同期することができる  
-・type 指定で環境構築に必要なボックス(OS)を設定している
+     
+- **変更点1**
+  ・ネットワークに必要なIPアドレスの設定している  
+  ・[その他vagrantネット設定説明](https://qiita.com/centipede/items/64e8f7360d2086f4764f)  
+
+- **変更点2**
+  ・カレントディレクトリと指定のディレクトリを指している。  
+  ・./はホストOSのvagrant_testを指しており/vagrantはゲストOSを指しておりvirtualboxで紐付けることでリアルタイムで同期しファイルの共有することが可能になる。  
+・type 指定で環境構築に必要なボックス仮想マシンを指定している
 
 <br>
 
 ## Vagrant プラグインインストール  
 
 [guest additions 参考リンク](https://weblabo.oscasierra.net/vagrant-vbguest-plugin-1/)  
-[vagrant-vbguest 参考リンク](https://pentan.info/server/vagrant/vagrant_vbguest_note.html)
+[vagrant-vbguest 参考リンク](https://pentan.info/server/vagrant/vagrant_vbguest_note.html)  
 
 vagrant はプラグイン(拡張機能)が用意されています  
 今回はvagrant-vbguestとsaharaをインストール します  
 vagrant-vbguestは初めに追加したBoxの中にインストールされているGuest  
-Additionsというもののバージョンを、
-VirtualBoxのバージョンに合わせて最新化してくれるプラグインです。
+Additionsというもののバージョンを、  
+VirtualBoxのバージョンに合わせて最新化してくれるプラグインです。  
 
 **Geust Additions 利点**
 -  クリップボードの共有
@@ -96,9 +190,8 @@ VirtualBoxのバージョンに合わせて最新化してくれるプラグイ�
 
 **sahara利点**
 -  環境構築中のゲストOSの状態の保存・巻き戻しができる
--  [sahara 操作方法はこちら](https://qiita.com/kidach1/items/ba365905b2a770c72be1)
-
-
+-  [sahara 操作方法はこちら](https://qiita.com/kidach1/items/ba365905b2a770c72be1)  
+-  
 **vagrant-vbguestインストール**
 
 ```
@@ -128,17 +221,18 @@ $ vagrant plugin list
 
 プラグインインストール確認ができたらVagrantを使用してゲストOSの起動をします。  
 以上で仮想環境を構築する準備は整いました。  
-Vagrantfileがあるディレクトリにて以下のコマンドを実行して、早速起動してみましょう。
+Vagrantfileがあるディレクトリにて以下のコマンドを実行して、早速起動してみましょう。  
 
 **vagrantを使用してゲストOSを起動**  
-以上で仮想環境を構築する準備はできました
+以上で仮想環境を構築する準備はできました  
 Vagrantfileのあるディレクトリにて以下のコマンドを実行しましょう！
 
 ```
 $vagrant up  
 ```
 
-初回起動に少し時間がかかるのでボケーっとしましょう！
+起動が完了したら次に進みましょう!
+
 
 ## ゲストOSをログインする  
 
@@ -146,8 +240,8 @@ $vagrant up
 では実際にゲストOSにログインしていきましょう。SSHはリモートマシンにログインするコマンドです。
 
 **ssh**  
-sshはリモートマシンにログインするコマンドです  
-今回は、VirtualBoxが提供するネットワークを通じてターミナル上でホストOSからゲストOS(リモートマシン)にログインします。
+sshはリモートマシンにログインするコマンドです。  
+今回は、VirtualBoxが提供するネットワークを通じてターミナル上でホストOSからゲストOS(仮想マシン)にログインします。
 
 **macでログイン**  
 作成した vagrant_test ディレクトリに移動して下記のコマンドを実行しましょう。
@@ -165,8 +259,8 @@ Welcome to your Vagrant-built virtual machine.
 
 <br>
 
-**vagrant ssh-configというコマンドを実行した結果出力される下記の情報を元に、SSHでの接続を行っています**  
-vagrant ssh-config というコマンドを実行した結果出力される下記の情報を元に、SSHでの接続を行っています。
+**vagrant ssh-configというコマンドを実行した結果出力される下記の情報を元に、SSH(サーバ)での接続を行っています**  
+vagrant ssh-config というコマンドを実行した結果出力される下記の情報を元に、SSHでの接続を行っています。  
 ゲストOS内にログインしている人は一度exit コマンドを使用してログアウトして、自分の環境で試しにコマンドを実行してみましょう。
 
 ```
@@ -191,12 +285,17 @@ vagrant    //ユーザー名
 
 <br>
 
-※注意
+**※注意**
 この先では様々なコマンドや操作を実行していきますが、今自分がホストOSとゲストOS、どちらのOSをコマンドラインで操作しているのか適切に判断できないと上手くセクションの内容が進められないだけでなく、何か取り返しのつかない操作をしてしまう可能性があります。
 
 プロンプトの部分を見て自分が今どちらのOSを操作しているのか、常に注意して把握するようにしてください。※ターミナルやコマンドプロンプトをカスタマイズしている方は下記の通りにはなりません。
 
 ## Mac
+[sudo参考リンク](https://www.sejuku.net/blog/54857)  
+
+ゲストOSかホストOSかわからなくなった時の区別として以下を参考にしてみてください  
+それでもわからない場合 `exit` をすることによってホストOSに戻れます  
+
 **ホストOS**
 
 ```
@@ -216,13 +315,30 @@ vagrant    //ユーザー名
 sudo yum -y groupinstall "development tools"
 ```
 
-このコマンドを実行することによりgitなどの開発に必要なパッケージを一括でインストールできます。
+このコマンドを実行することによりgitなどの開発に必要なパッケージを一括でインストールできます。  
+
+**sudo**
+**ユーザを切り替えず**に他のユーザーやスーパーユーザー(全ての権限を持っているユーザーのこと)権限でコマンドを実行することができる
+続行するにあったって以下の操作をすることができる  
+- コマンドを実行することができる
+- シェルを実行できる
+- ファイルの編集、実行することができる  
+  
+しかし禁止されているコマンドなどある為注意して実行した方がいいしれべて実行するようにしましょう
+
+**yum**
+UNIX形で利用することができるコマンド  
+インストールする時にyes/noと聞かれる時に全てyesで実行してくれる為、大量のパッケージを実行する際に  
+毎回yesと入力する手間が省けるコマンドと覚えましょう！
+
+
 
 <br>
 
 ## PHPインストール(7.3 ver)
 
-https://www.suzu6.net/posts/152-centos7-php-73/
+[PHP7.3インストール](https://www.suzu6.net/posts/152-centos7-php-73/)
+[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
 
 **REMIリポジトリ追加**
 
@@ -253,9 +369,12 @@ PHPのインストールと同時に、PHPアプリケーションを動かす�
 例えば `php-pdo` はPDO接続行う為に、`php-mbstring`はPHPで日本語名護のマルチバイト文字を扱う為に必要になります  
 アプリケーションの開発に必要な外部モジュール箱のように追加していきます。
 
-[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
-[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)
+**補足**
+下記コマンドを入力することでインストールしたモジュールを確認することができる
 
+```
+rpm -qa | grep php
+```
 
 ## composerのインストール
 
@@ -277,6 +396,8 @@ composer -v
 ```
 
 ## laravel インストール(var6.0)
+[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)  
+
 **バージョン指定する**
 vagrantfileのディレクトリにてvagrant ssh 実行時の場所で以下のコマンドを実行してください
 
@@ -284,13 +405,16 @@ vagrantfileのディレクトリにてvagrant ssh 実行時の場所で以下の
 composer create-project laravel/laravel --prefer-dist ディレクトリ名 6.0
 php artisan -v
 ```
-バージョンを指定してもcomposerに依存したバージョンになるため気にしなくて大丈夫です
+
+バージョンを指定してもcomposerに依存したバージョンになるため気6.0にならなくても大丈夫です。
 
 **認証機能導入**
-ログイン機能を実行
+次にインストールしたlaravelに認証(ログイン)機能を実装していきます。
+バージョンによっては `php artisan ui vue --auth` が利用できない場合がある為気をつけましょう!
+
+ログイン機能を実行(laravel 6.0の場合)
 
 ```
-laravel 6.0の場合
 composer require laravel/ui:^1.0 --dev
 php artisan ui vue --auth
 ```
@@ -298,9 +422,8 @@ php artisan ui vue --auth
 `http://192.168.33.19/`  実行してみましょう
 
 
-phpバージョンの相違があるとエラーが起きるので下記参照
-[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)
-
+phpバージョンの相違があるとエラーが起きるので下記を参考にし再度インストールしし直してください!!  
+[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)
 
 ## データベースインストール
 今回インストールするデータベースはMySQLとなります。versionは5.7を使用します.  
@@ -325,11 +448,14 @@ mysql --version
 versionの確認ができましたらインストール完了です。  
 次にMySQLを起動し接続を行います。
 
+```
 sudo systemctl start mysqld  
 mysql -u root -p  
 Enter password:
+```
 
-MacあるいはWindowsにMySQLをインストールしたときは、何も入力せずに接続が可能だったかと思いますが今回はデフォルトでrootにパスワードが設定されてしまっています。  
+MacあるいはWindowsにMySQLをインストールしたときは、何も入力せずに接続が可能だったかと思いますが今回はデフォルトで  
+rootにパスワードが設定されてしまっています。  
 まずはpasswordを調べ、接続しpassswordの再設定を行っていく必要があります。
 
 ※ 今回は、比較的簡単な方法でパスワードの再設定を行いますが、セキュリティ的によろしくはないため本番環境と呼ばれる環境でこの方法で再設定するのは避けてください。
@@ -348,7 +474,7 @@ $ Enter password:
 mysql > 
 ```
 
-問題なく接続できたでしょうか？次に接続した状態でpasswordの変更を行います。
+問題なく接続できたでしょうか？次に接続した状態で**passwordの変更**を行います。
 
 ```
 mysql > set password = "新たなpassword";
@@ -376,7 +502,7 @@ socket=/var/lib/mysql/mysql.sock
 validate-password=OFF
 ```
 
-編集後はMySQLサーバの再起動が必要です
+**編集後はMySQLサーバの再起動が必要です**
 
 ```
 $ sudo systemctl restart mysqld  //MySQLサーバ再起動
@@ -387,7 +513,8 @@ $ sudo systemctl restart mysqld  //MySQLサーバ再起動
 
 # データベース構築
 ## データベースの作成
-実際にLaravelのTodoアプリケーションを動かす上で使用するデータベースの作成を行います。
+mysqlを導入したので実際に  
+LaravelのTodoアプリケーションを動かす上で使用するデータベースの作成を行います。
 
 ```
 mysql > create database laravel_app;
@@ -446,7 +573,14 @@ $ sudo systemctl start nginx
 表示されたら問題なく動いていますので次に進みましょう。
 
 ## Nginx と php-fpm 設定値変更
-では、早速Nginxの設定ファイルを編集していきます。
+では、早速Nginxの設定ファイルを編集していきます。  
+うまく動かない時は **`php-fpm`** がインストールしていない可能性がある為念のため確認してみましょう  
+なかった場合phpインストールの所に再インストールコマンドや資料がある為参考にして実行してみましょう  
+
+```
+rpm -qa | grep php
+```
+
 使用しているOSがCentOSの場合、`/etc/nginx/conf.d` ディレクトリ下の default.conf ファイルが設定ファイルとなります。
 
 ```
@@ -488,7 +622,7 @@ server {
   # 省略
 ```
 
-Nginxの設定ファイルの変更は、以上です。次に php-fpm の設定ファイルを編集していきます。
+Nginxの設定ファイルの変更は、以上です。次に **`php-fpm`** の設定ファイルを編集していきます。
 
 ```
 $ sudo vi /etc/php-fpm.d/www.conf
@@ -520,7 +654,7 @@ $ sudo systemctl start php-fpm   //php-fpm 再起動
 ```
 
 再度ブラウザにて、 `http://192.168.33.10` を入力して確認してください。  
-Apache同様にTodoアプリケーションを動かすことはできたでしょうか？？
+Todoアプリケーションを動かすことはできたでしょうか？？
 
 <br>
 
@@ -540,18 +674,20 @@ The stream or file "/vagrant/laravel_app/storage/logs/laravel.log" could not be 
 $ ls -la ./ | grep storage && ls -la storage/ | grep logs && ls -la storage/logs/ | grep laravel.log
 ```
 
-出力結果から、storageディレクトリも logsディレクトリも laravel.logファイルも全て `user` と `group` が
-`vagrant` となっていますので、これでは `nginx` というユーザーの権限をもってlaravel.logファイルへの書き込みができません。
+出力結果から、storageディレクトリも logsディレクトリも laravel.logファイルも全て `user` と `group` が  
+`vagrant` となっていますので、これでは `nginx` という**ユーザーの権限**をもってlaravel.logファイルへの書き込みができません。  
 
-では、以下のコマンドを実行して `nginx` というユーザーでもログファイルへの書き込みができる権限を付与してあげましょう。
+では、以下のコマンドを実行して `nginx` というユーザーでもログファイルへの書き込みができる**権限を付与**してあげましょう。  
 
 ```
 $ cd /vagrant/laravel_app
 $ sudo chmod -R 777 storage
 ```
 
+[パーミッション 操作権限の変更](https://note.mokuzine.net/ssh-permission-denied/)  
+
 **書き込み権限を得たのか確認**  
-laravel.logにはLaravelアプリケーション実行中にエラーが生じた場合に画面に表示されるエラー内容(皆さんも良く見たであろうWhoops)と全く同じ内容が書き込みされています。
+laravel.logにはLaravelアプリケーション実行中にエラーが生じた場合に画面に表示されるエラー内容(皆さんも良く見たであろうWhoops)と全く同じ内容が書き込みされています。  
 
 そのため、意図的にアプリケーション実行エラーを起こしてlaravel.logに画面と同じエラーが表示されているか見てみましょう。
 
@@ -574,43 +710,52 @@ Route::get('/', function () {
 });
 ```
 
-編集が完了しましたら次は以下のコマンドを実行します。
+編集が完了しましたら次は以下のコマンドを実行します。  
 
 ```
 $ tail -f storage/logs/laravel.log
 ```
 
-では、再度 `http://192.168.33.10` のURLにアクセスしてみます。
+では、再度 `http://192.168.33.10` のURLにアクセスしてみます。  
 
 ```
 syntax error, unexpected '}', expecting ';'
 ```
 
-といった内容のエラーが画面上に表示され、同じ内容のエラー文言がlaravel.logに書き込みされたことも確認できたでしょうか？？
+といった内容のエラーが画面上に表示され、同じ内容のエラー文言がlaravel.logに書き込みされたことも確認できたでしょうか？？  
 
-確認が完了しましたら、`Ctrl + c` でtailの実行モードを終了しましょう。
+確認が完了しましたら、**`Ctrl + c`** でtailの実行モードを終了しましょう。  
 
-では変更した `routes/web.php` の内容を元に戻して再度 http://192.168.33.10 にアクセスして正常にLaravelのWelcome画面の表示をしてください。
+では変更した **`routes/web.php`** の内容を元に戻して再度 http://192.168.33.10 にアクセスして正常にLaravelのWelcome画面の表示をしてください。
 
-[パーミッション 操作権限の変更](https://note.mokuzine.net/ssh-permission-denied/)
+welcome画面がでできたら右上に **`register`** とクリックできる場所があるのでそこでユーザ追加して再度ログインできたら完成です！  
+
+お疲れ様でした!  
+
 
 <br>
 
 [環境構築と所感]  
 自身で構築してみて重いとゆうのが第一印象でした。
-エラー文に直面した時にディレクトリを作成していない、必要パッケージインストールをしていないなどのことがあった為エラー文を解決することによってのググり力とゆうのがついた気がします。
-英語が弱く、このカリキュラムを通して翻訳使わずとも読解できるように少しでも意識を付けていくようになった気がします。
-この教材では仮想環境開発を構築のみしかしていないのでそこに自身でアプリ導入する際や現場などでそういった場面があった時に経験値積んでその開発に適した環境構築をできるようになり、柔軟に対応しなければと思いました。
+エラー文に直面した時にディレクトリを作成していない、必要パッケージインストールをしていないなどのことがあった為エラー文を解決することによってのググり力とゆうのがついた気がします。  
+英語が弱く、このカリキュラムを通して翻訳使わずとも読解できるように少しでも意識を付けていくようになった気がします。  
+この教材では仮想環境開発を構築のみしかしていないのでそこに自身でアプリ導入する際や現場などでそういった場面があった時に経験値積んでその開発に適した環境構築をできるようになり、柔軟に対応しなければと思いました。  
 
 
 
 [参考サイト]  
-[全体参考](https://qiita.com/7968/items/97dd634608f37892b18a)  
+[仮想環境とは](https://bcblog.sios.jp/what-is-virtualenvironment-vmware/#i)  
+[virtualbox1](https://www.sejuku.net/blog/72833)  
+[virtualbox2](https://eng-entrance.com/vm-list#VirtualBox)  
 [Virtual Box公式](https://www.virtualbox.org/wiki/Download_Old_Builds_6_0)  
-[その他vagrantネット設定説明](https://qiita.com/centipede/items/64e8f7360d2086f4764f)   
-[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
-[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)  
-[sahara 操作方法はこちら](https://qiita.com/kidach1/items/ba365905b2a770c72be1)  
+[vagrantfile1](https://qiita.com/pugiemonn/items/bcd95a35c3ec7624cd61)  
+[その他vagrantネット設定説明](https://qiita.com/centipede/items/64e8f7360d2086f4764f)  
 [guest additions 参考リンク](https://weblabo.oscasierra.net/vagrant-vbguest-plugin-1/)  
 [vagrant-vbguest 参考リンク](https://pentan.info/server/vagrant/vagrant_vbguest_note.html)  
-[パーミッション 操作権限の変更](https://note.mokuzine.net/ssh-permission-denied/)
+[sahara 操作方法はこちら](https://qiita.com/kidach1/items/ba365905b2a770c72be1)  
+[sudo参考リンク](https://www.sejuku.net/blog/54857)  
+[PHP7.3インストール](https://www.suzu6.net/posts/152-centos7-php-73/)  
+[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
+[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)  
+[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
+[パーミッション 操作権限の変更](https://note.mokuzine.net/ssh-permission-denied/)  
