@@ -31,7 +31,7 @@ Virtual Boxはver6.0.14をインストールするようにしてください。
 <br>
 
 #### virtualbox インストール (Macの場合)
-**`OS X hosts`** を選択しましょう。
+**`OS X hosts`** を選択しましょう。
 
 以下のコマンドを実行してVirtualBoxのウィンドウが表示されれば正常にインストールされています。  
 
@@ -191,7 +191,7 @@ VirtualBoxのバージョンに合わせて最新化してくれるプラグイ�
 **sahara利点**
 -  環境構築中のゲストOSの状態の保存・巻き戻しができる
 -  [sahara 操作方法はこちら](https://qiita.com/kidach1/items/ba365905b2a770c72be1)  
--  
+  
 **vagrant-vbguestインストール**
 
 ```
