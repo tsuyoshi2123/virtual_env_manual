@@ -1,6 +1,7 @@
 # 目次
 
  - 仮想環境  
+ - はじめに
  - 環境  
  -  vagrant 
     - vagrant virtualbox インストール  
@@ -8,7 +9,7 @@
     - Vagrant 作業用ディレクトリ作成  
     - Vagrantfile 編集  
     - vagrant プラグインインストール  
-    - ゲストOSをログインする  
+    - ゲストOSにログインする  
     - ログイン時のOS識別(Mac)  
  - PHP
    - PHPインストール(7.3 ver)  
@@ -29,6 +30,8 @@
 
 <br>
 
+# はじめに
+  ### この手順書はMacOSを使用していることを前提にとします
 # 仮想環境  
  ### 仮想環境とは  
   仮想的サーバ、ストレージを作ることによって物理的環境に左右されることなく使用することができる。  
@@ -39,11 +42,11 @@
 <br>
 
 ### vagrantとは  
-  仮想マシン(virtualbox,docker)の簡単な構築をし同じような環境を再現することができる。  
-  そのほかにコマンド一つで仮想マシンを起動削除したりなど容易に管理する。  
+  仮想マシンの簡単な構築をし同じような環境を再現することができる。  
+  そのほかにコマンド一つで仮想マシン(virtualbox,docker)を起動削除したりなど容易に管理する。  
   これから利用する**virtualbox**では**ホストOSとゲストOS間を同時並行**して仮想的なOSを一つを追加して  
   OS間の移動をすることができる。  
-  共有フォルダを設けることによって**ホストOSとゲストOS間のファイルやディレクトリを共有**することできる  
+  共有フォルダを設けることによって**ホストOSとゲストOS間のファイルやディレクトリを共有**することできる。  
   などの操作をすることができる。詳しくは上記にリンクが貼っているので参照しましょう。  
 
 <br>
@@ -60,7 +63,7 @@
 |Nginx    |  1.19     |
 |MySQL    |  5.7      |
 |Laravel  |  6.0      |
-|OS       |  Cent7    |
+|OS       |  CentOS 7 |
 
 <br>
 
@@ -68,14 +71,14 @@
 ## vagrant virtualbox インストール
 ### virtualbox ダウンロード
 
-下記のサイトからそれぞれのdmgファイルをダウンロード後、インストールを進めてください。  
+下記のサイトからそれぞれのOSに対応したdmgファイルをダウンロード後、インストールを進めてください。  
 [Virtual Box公式](https://www.virtualbox.org/wiki/Download_Old_Builds_6_0)  
 
 ##### Vagrantの最新バージョンがVirtualBoxの最新バージョンに対応していないため、Virtual Boxはver6.0.14をインストールするようにしてください。
 
 <br>
 
-#### virtualbox インストール (Macの場合)
+#### virtualbox インストール 
 **`OS X hosts`** を選択しましょう。
 
 ##### 以下のコマンドを実行してVirtualBoxのウィンドウが表示されれば正常にインストールされています。  
@@ -86,8 +89,8 @@ $ virtualbox
 
 コマンド実行後は入力を受け付けない状態となるため、 **`Control + c`** を押してください。
 
-#### Vagrant インストール (Macの場合)
-下記コマンドで簡単にインストールすることが可能です。
+#### Vagrant インストール 
+下記コマンドで簡単にインストールすることが可能です。  
 
 ```
 $ brew cask install vagrant
@@ -99,15 +102,16 @@ $ brew cask install vagrant
 $ vagrant -v
 ```
 
-##### バージョンが確認できたらインストール完了です  
+##### バージョンが確認できたらインストール完了です。  
 
 <br>
 
 ## vagrant box ダウンロード  
 <br>
 
-仮想環境(ゲストOS)をで開発するにあったって、ゲストOSに必要なOSを追加しなくてはなりません  
-今回使用するのはlinuxのCentOSのバージョン7のBox名 **`centos/7`** を指定して実際にダウンロードしてみましょう!  
+仮想環境(ゲストOS)で開発するにあったって、ゲストOSに必要なOSを追加しなくてはなりません。  
+今回使用するのはlinuxのcentOSのバージョン7を使用したいので、Box名を**`centOS/7`**を指定し実際にダウンロードしてみましょう!
+
 
 ##### コマンドを実行するディレクトリはどこでも構いません
 
@@ -153,7 +157,7 @@ centos/7 (virtualbox, 1902.01)
 - **デスクトップ**
 
 ```
-$ # mkdir ディレクトリ名 ここではディレクトリ名をvagrant_testとしましょう
+# mkdir ディレクトリ名 ここではディレクトリ名をvagrant_testとしましょう
 $ mkdir vagrant_test
 ```
 
@@ -163,11 +167,9 @@ $ mkdir vagrant_test
 $ cd vagrant_test
 ```
 
-##### 作成したらフォルダの中で以下のコマンドを実行してください
+##### 作成したらフォルダの中で以下のコマンドを実行してください。  
 
 ```
-# 作成したディレクトリに移動
-cd vagrant_test
 # vagrant init box名 先ほどダウンロードしたboxを使用することになります
 vagrant init centos/7
 実行後問題なければ以下のような文言が表示されます
@@ -177,9 +179,9 @@ the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
 ```
 
-`vagrant init centos/7`を実行したことにより作成したディレクトリ内に
-`Vagrantfile` という設定ファイルが作成されています
-実際に編集してみましょう
+`vagrant init centos/7`を実行したことにより作成したディレクトリ内に  
+`Vagrantfile` という設定ファイルが作成されています。  
+実際に編集してみましょう。  
 
 <br>
 
@@ -188,34 +190,34 @@ the comments in the Vagrantfile as well as documentation on
 
 ##### vagrantfaile編集前に...
 
-`vi vagrantfile` `vi 指定ファイルまでの相対パス` と実行するとvimコマンドが実行されターミナル上で指定したファイルの
-編集を行うことができます.
+`vi vagrantfile` `vi 指定ファイルまでの相対パス` と実行するとvimコマンドが実行されターミナル上で指定したファイルの  
+編集を行うことができます。  
 編集してみましょう!
 
 ##### vagrant 編集 Vagrantfile ファイル  
 
-下記の編集箇所のコメントを外し変更を加えてください  
+下記の編集箇所のコメントを外し変更を加えてください。  
 
 ```
 変更点1   IPアドレスプライベートネットワーク設定
   # config.vm.network "private_network", ip: "192.168.33.10"
                             ↓
-  # config.vm.network "private_network", ip: "192.168.33.19"
+  config.vm.network "private_network", ip: "192.168.33.19"
 変更点2   
   # config.vm.synced_folder "../data", "/vagrant_data"
                             ↓
-  # config.vm.synced_folder "./", "/vagrant", type:"virtualbox"  
+  config.vm.synced_folder "./", "/vagrant", type:"virtualbox"  
 ```
 
 
 - **変更点1**
-  ・ネットワークに必要なIPアドレスの設定している  
+  ・ネットワークに必要なIPアドレスの設定している。  
   ・[その他vagrantネット設定説明](https://qiita.com/centipede/items/64e8f7360d2086f4764f)  
 
 -  **変更点2**
   ・カレントディレクトリと指定のディレクトリを指している。  
   ・`./`はホストOSの `vagrant_test` を指しており `/vagrant` はゲストOSを指しており virtualbox で紐付けることでリアルタイムで同期しファイルの共有することが可能になる。  
-・type 指定で環境構築に必要なボックス仮想マシンを指定している
+・type 指定で環境構築に必要なボックス仮想マシンを指定している。
 
 <br>
 
@@ -224,8 +226,8 @@ the comments in the Vagrantfile as well as documentation on
 [guest additions 参考リンク](https://weblabo.oscasierra.net/vagrant-vbguest-plugin-1/)  
 [vagrant-vbguest 参考リンク](https://pentan.info/server/vagrant/vagrant_vbguest_note.html)  
 
-vagrant はプラグイン(拡張機能)が用意されています  
-今回は vagrant-vbguest と sahara をインストールします  
+vagrant はプラグイン(拡張機能)が用意されています。  
+今回は vagrant-vbguest と sahara をインストールします。  
 vagrant-vbguest は初めに追加した Box の中にインストールされている Guest  
 Additions というもののバージョンを、  
 VirtualBox のバージョンに合わせて最新化してくれるプラグインです。  
@@ -269,17 +271,10 @@ $ vagrant plugin list
 sahara (0.0.xx)   ← インストールバージョンが異なります
 ```
 
-##### プラグインバージョン確認  
-プラグインがインストールされたか確認しましょう！
-
-```
-$ vagrant plugin list
-```
-
 <br>
 
 ##### vagrantを使用してゲストOSを起動  
-以上で仮想環境を構築する準備はできました  
+以上で仮想環境を構築する準備はできました。  
 Vagrantfileのあるディレクトリにて以下のコマンドを実行しましょう！
 
 ```
@@ -289,7 +284,7 @@ $ vagrant up
 起動が完了したら次に進みましょう!
 
 
-## ゲストOSをログインする  
+## ゲストOSにログインする  
 
 起動が正常に終了すれば、皆さんが使用しているPCのOSであるホストOSの上に全く別のゲストOSが立ち上がったことになります。  
 では実際にゲストOSにログインしていきましょう。 SSH はリモートマシンにログインするコマンドです。  
@@ -316,9 +311,8 @@ Welcome to your Vagrant-built virtual machine.
 
 <br>
 
-##### vagrant ssh-configというコマンドを実行した結果出力される下記の情報を元に、SSH(サーバ)での接続を行っています  
 **`vagrant ssh-config`** というコマンドを実行した結果出力される下記の情報を元に、SSHでの接続を行っています。  
-ゲストOS内にログインしている人は一度exit コマンドを使用してログアウトして、自分の環境で試しにコマンドを実行してみましょう。
+ゲストOS内にログインしている人は一度exit コマンドを使用してログアウトして、自分の環境で試しにコマンドを実行してみましょう。  
 
 ```
 $ vagrant ssh-config
@@ -351,7 +345,7 @@ vagrant    //ユーザー名
 
 [sudo参考リンク](https://www.sejuku.net/blog/54857)  
 
-ゲストOSかホストOSかわからなくなった時の区別として以下を参考にしてみてください   
+ゲストOSかホストOSかわからなくなった時の区別として以下を参考にしてみてください。   
 
 ##### ホストOS
 
@@ -364,6 +358,14 @@ vagrant    //ユーザー名
 ```
 [vagrant@localhost ~]$
 ```
+
+<br>
+
+# PHP
+## PHPインストール(7.3 ver)  
+
+[PHP7.3インストール](https://www.suzu6.net/posts/152-centos7-php-73/)
+[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
 
 <br>
 
@@ -380,12 +382,12 @@ $ sudo yum -y groupinstall "development tools"
 
 ##### sudo  
 
-**ユーザを切り替えず**にスーパーユーザー(全ての権限を持っているユーザーのこと)権限でコマンドを実行することができる続行するにあったって以下の操作をすることができる  
-- コマンドを実行することができる
-- シェルを実行できる
-- ファイルの編集、実行することができる  
+**ユーザを切り替えず**にスーパーユーザー(全ての権限を持っているユーザーのこと)権限でコマンドを実行することができる続行するにあったって以下の操作をすることができる。  
+- コマンドを実行することができる。  
+- シェルを実行できる。  
+- ファイルの編集、実行することができる。  
 
-しかし禁止されているコマンドなどある為注意して実行するようにしましょう
+しかし禁止されているコマンドなどある為注意して実行するようにしましょう。  
 
 <br>
 
@@ -396,12 +398,6 @@ $ sudo yum -y groupinstall "development tools"
 
 <br>
 
-# PHP
-## PHPインストール(7.3 ver)  
-
-[PHP7.3インストール](https://www.suzu6.net/posts/152-centos7-php-73/)
-[phpバージョン アップデート 変更 消去](https://qiita.com/heimaru1231/items/84d0beca81ca5fdcffd0)  
-
 ##### REMIリポジトリ追加
 
 ```
@@ -409,6 +405,8 @@ $ sudo yum -y install epel-release wget
 $ sudo wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 $ sudo rpm -Uvh remi-release-7.rpm
 ```
+
+<br>
 
 ##### PHP7.3インストール
 
@@ -419,7 +417,7 @@ $ php -v      //バージョン確認後7.3と表示されればOK
 ```
 
 yum コマンドを使用してPHPをインストールした場合、古いバージョンのPHPがインストールされてしまいます。  
-Laravel を動作させるにはPHPのバージョン7以上をインストールする必要があるため  
+Laravel を動作させるにはPHPのバージョン7以上をインストールする必要があるため。  
 yum ではなく外部パッケージツールをダウンロードして、そこからPHPをインストールしていきます。
 
 <br>
@@ -427,16 +425,20 @@ yum ではなく外部パッケージツールをダウンロードして、そ�
 ##### 拡張モジュール  
 下記のコマンド参照  
 `php php-devel php-mbstring php-pdo php-gd php-xml php-mcrypt`の部分は  
-PHPのインストールと同時に、PHPアプリケーションを動かす上で必要となるモジュール(拡張機能)をインストールしています  
-例えば `php-pdo` はPDO接続行う為に、`php-mbstring`はPHPで日本語名護のマルチバイト文字を扱う為に必要になります  
+PHPのインストールと同時に、PHPアプリケーションを動かす上で必要となるモジュール(拡張機能)をインストールしています。  
+例えば `php-pdo` はPDO接続行う為に、`php-mbstring`はPHPで日本語名護のマルチバイト文字を扱う為に必要になります。  
 アプリケーションの開発に必要な外部モジュール箱のように追加していきます。
 
+<br>
+
 ##### 補足
-下記コマンドを入力することでインストールしたモジュールを確認することができる
+下記コマンドを入力することでインストールしたモジュールを確認することができる。  
 
 ```
 $ rpm -qa | grep php
 ```
+
+<br>
 
 ## composerのインストール
 
@@ -459,13 +461,12 @@ $ composer -v
 
 # laravel
 ## laravel インストール(var6.0)
-[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)  
 
 ##### バージョン指定する  
-vagrantfileのディレクトリにて `vagrant ssh` 実行時の場所で以下のコマンドを実行してください  
+vagrantfileのディレクトリにて `vagrant ssh` 実行時の場所で以下のコマンドを実行してください。  
 
 ```
-$ composer create-project laravel/laravel --prefer-dist ディレクトリ名 6.0
+$ composer create-project laravel/laravel --prefer-dist プロジェクト名 6.0
 $ php artisan -v
 ```
 
@@ -474,6 +475,7 @@ composer に依存したバージョンになる為laravelバージョン**6.x**
 <br>
 
 ##### 認証機能導入  
+[auth インストール](https://qiita.com/daisu_yamazaki/items/a914a16ca1640334d7a5)  
 次にインストールしたlaravelに認証(ログイン)機能を実装していきます。  
 バージョンによっては **`php artisan ui vue --auth`** が利用できない場合がある為きをつけましょう!
 
@@ -486,7 +488,7 @@ $ composer require laravel/ui:^1.0 --dev
 $ php artisan ui vue --auth
 ```
 
-**`http://192.168.33.19/`**  実行してみましょう
+ブラウザ上で**`http://192.168.33.19/`**  実行してみましょう。
 
 
 php バージョンの相違があるとエラーが起きるので下記を参考にし再度インストールしし直してください!!  
@@ -497,9 +499,10 @@ php バージョンの相違があるとエラーが起きるので下記を参�
 
 <br>
 
-今回インストールするデータベースはMySQLとなります。versionは5.7を使用します.  
+今回インストールするデータベースはMySQLとなります。versionは5.7を使用します。  
 centos7 は、デフォルトで variaDB というデータベースがインストールされていますが、 MariaDB は MYSQL と互換性があるDBなのできにせず、MySQLのインストールを進めていきます。  
 rpm に新たにリポジトリを追加し、インストールを行います。  
+
 <br>
 
 ##### rpm
@@ -527,11 +530,11 @@ $ Enter password:
 
 <br>
 
-MacあるいはWindowsにMySQLをインストールしたときは、何も入力せずに接続が可能だったかと思いますが今回はデフォルトで  
-root にパスワードが設定されてしまっています。  
+MacあるいはWindowsにMySQLをインストールしたときは、何も入力せずに接続が可能だったかと思いますが  
+今回はデフォルトでroot にパスワードが設定されてしまっています。  
 まずは password を調べ、接続し passsword の再設定を行っていく必要があります。  
 
-**※** 今回は、比較的簡単な方法でパスワードの再設定を行いますが、セキュリティ的によろしくはないため本番環境と呼ばれる環境でこの方法で再設定するのは避けてください。
+**※** 今回は、比較的簡単な方法でパスワードの再設定を行いますが、セキュリティ的によろしくはないため本番環境と呼ばれる環境でこの方法で再設定するのは避けてください。  
 
 ```
 $ sudo cat /var/log/mysqld.log | grep 'temporary password'  # このコマンドを実行したら下記のように表示されたらOKです
@@ -642,8 +645,8 @@ $ sudo systemctl start nginx
 
 ## Nginx と php-fpm 設定値変更  
 では、早速 Nginx の設定ファイルを編集していきます。  
-うまく動かない時は **`php-fpm`** がインストールされていない可能性がある為念のため確認してみましょう  
-なかった場合 php インストールの所に再インストールコマンドや資料がある為参考にして実行してみましょう  
+うまく動かない時は **`php-fpm`** がインストールされていない可能性がある為念のため確認してみましょう。  
+なかった場合 php インストールの所に再インストールコマンドや資料がある為参考にして実行してみましょう。  
 
 ##### パッケージ確認方法
 
@@ -813,7 +816,7 @@ welcome画面がでできたら右上に **`register`** とクリックできる
 
 <br>
 
-##### 参考サイト 
+##### 参考サイト  
 [仮想環境とは](https://bcblog.sios.jp/what-is-virtualenvironment-vmware/#i)  
 [virtualbox1](https://www.sejuku.net/blog/72833)  
 [virtualbox2](https://eng-entrance.com/vm-list#VirtualBox)  
