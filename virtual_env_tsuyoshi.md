@@ -816,7 +816,7 @@ welcome画面がでできたら右上に **`register`** とクリックできる
 
 <br>
 
-##### 参考サイト  
+##### 参考サイト
 [仮想環境とは](https://bcblog.sios.jp/what-is-virtualenvironment-vmware/#i)  
 [virtualbox1](https://www.sejuku.net/blog/72833)  
 [virtualbox2](https://eng-entrance.com/vm-list#VirtualBox)  
